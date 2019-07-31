@@ -27,12 +27,11 @@ curl -XGET localhost:9205/_cluster/stats?pretty
 	# docs.count：文档总数。 
 	# store.size_in_bytes：数据总存储容量。 
 	# segments.count：段总数。 
-	# nodes.count.total：总节点数。 
+	# nodes.count.total：总节点数。  
 	# nodes.count.data：数据节点数。 
 	# nodes. process. cpu.percent：节点CPU使用率。 
 	# fs.total_in_bytes：文件系统使用总容量。 
 	# fs.free_in_bytes：文件系统剩余总容量。
-
 
 # 节点监控
 curl -XGET localhost:9205/_nodes/stats?pretty 
@@ -54,13 +53,24 @@ curl -XGET localhost:9205/_stats?pretty
 
 
 
+curl -XGET localhost:9205/_cluster/health?pretty=true # 查看集群健康状态
 
-curl GET http://10.252.148.85:9200/_cluster/health?level=indices 查找有问题的索引
+curl -XGET "localhost:9205/_cat/indices?v=" | grep red # 查出红的索引
 
-curl -XGET localhost:9205/_cluster/health?pretty=true 查看集群健康状态
-curl -XGET "localhost:9205/_cat/indices?v=" 查出红的索引
+curl -XDELETE 'http://192.168.169.47:9206/group_message_2019-07-02' #根据索引名删除索引
+
+curl -XGET localhost:9205/_cat/shards | grep UNASSIGNED # 查看有问题的分片 没有被分配的分片
+
+curl 'localhost:9205/_nodes/process?pretty'           # 查看结点的信息 包括id等信息
+
+# index有问题分片的索引名 shard 编号 通过查找有问题的分片的命令会给出  node 主节点的唯一标识
+curl -XPOST 'localhost:9205/_cluster/reroute' -d '{"commands" : [ {"allocate" : {"index" : "weibo_xnr","shard" : 2,"node" : "ixrP7jYYROaGTdbtGkmlgg","allow_primary" : true}}] }' # 重新分配索引分片
 
 
 
 
 
+
+
+
+  
