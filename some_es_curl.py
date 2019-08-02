@@ -66,8 +66,8 @@ curl 'localhost:9205/_nodes/process?pretty'           # 查看结点的信息 �
 # index有问题分片的索引名 shard 编号 通过查找有问题的分片的命令会给出  node 主节点的唯一标识
 curl -XPOST 'localhost:9205/_cluster/reroute' -d '{"commands" : [ {"allocate" : {"index" : "weibo_xnr","shard" : 2,"node" : "ixrP7jYYROaGTdbtGkmlgg","allow_primary" : true}}] }' # 重新分配索引分片
 
-
-
+# 查看集群状态 多少个index 看count就行
+curl -XGET 'localhost:9205/_cluster/stats?pretty=true'
 
 
 
